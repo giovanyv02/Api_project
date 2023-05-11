@@ -41,7 +41,7 @@ if (!isProduction) {
   );
 
  
-const routes = require('./route');
+const routes = require('./routes');
 
 // ...
 
