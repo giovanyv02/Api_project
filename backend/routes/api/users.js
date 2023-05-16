@@ -35,7 +35,7 @@ const validateSignup = [
       const user = await User.create({ email, username, hashedPassword, first_Name, last_Name });
   
       const safeUser = {
-        message: 'ok',
+       
         id: user.id,
         username: user.username,
         email: user.email,

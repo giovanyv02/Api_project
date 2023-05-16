@@ -1,14 +1,13 @@
-'use strict';
-require("dotenv").config();
+"use strict";
+
 let options = {};
-if(process.env.NODE_ENV === 'production'){
-  options.schema = process.env.SCHEMA;
-  
-  /** @type {import('sequelize-cli').Migration} */
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
 }
+
 module.exports = {
-  up: async(queryInterface, Sequelize) =>{
-    return queryInterface.createTable('Users', {
+  up: async (queryInterface, Sequelize) => {
+    return queryInterface.createTable("Users", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -18,7 +17,7 @@ module.exports = {
       username: {
         type: Sequelize.STRING(30),
         allowNull: false,
-        unique: true,
+        unique: true
       },
       email: {
         type: Sequelize.STRING(256),
@@ -26,7 +25,7 @@ module.exports = {
         unique: true
       },
       hashedPassword: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING.BINARY,
         allowNull: false
       },
       createdAt: {
@@ -41,8 +40,8 @@ module.exports = {
       }
     }, options);
   },
-   down: async(queryInterface, Sequelize)=> {
-    options.tableName = 'Users'
+  down: async (queryInterface, Sequelize) => {
+    options.tableName = "Users";
     return queryInterface.dropTable(options);
   }
 };
