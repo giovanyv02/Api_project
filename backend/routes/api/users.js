@@ -30,17 +30,17 @@ const validateSignup = [
     '/',
     validateSignup,
     async (req, res) => {
-      const { email, password, username, first_Name, last_Name } = req.body;
+      const { email, password, username, firstName, lastName } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
-      const user = await User.create({ email, username, hashedPassword, first_Name, last_Name });
+      const user = await User.create({ email, username, hashedPassword, firstName, lastName });
   
       const safeUser = {
        
+        first_Name: user.firstName,
+        last_Name: user.lastName,
         id: user.id,
         username: user.username,
-        email: user.email,
-        first_Name: user.first_Name,
-        last_Name: user.last_Name
+        email: user.email
       };
       
       await setTokenCookie(res, safeUser);
