@@ -44,7 +44,16 @@ module.exports = (sequelize, DataTypes) => {
     country: DataTypes.STRING,
     lat: DataTypes.DECIMAL,
     lng: DataTypes.DECIMAL,
-    name: DataTypes.STRING,
+    name:{
+      type: DataTypes.STRING,
+      validate:{
+        lessThan(val){
+          if(val.length > 49){
+            throw new Error("Name must be less than 50 characters")
+          }
+        }
+      }
+    },
     description: DataTypes.STRING,
     price: DataTypes.DECIMAL
   }, {
