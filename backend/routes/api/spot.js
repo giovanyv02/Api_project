@@ -1,5 +1,5 @@
 const express = require('express');
-const {} = require('sequelize');
+const {sequelize} = require('sequelize');
 const {User, Spot, SpotImage, Review, ReviewImage, Booking} = require("../../db/models");
 const router = express.Router();
 const { fn, col } = require("sequelize");
@@ -48,22 +48,54 @@ router.get(
         page = parseInt(page);
         size = parseInt(size);
 
-        const allSpot = await Spot.findAll();
-
-        const avgR = await Review.findAll({
-            attributes: ["spotId", [fn("AVG", col("stars")), "avgRating"]],
-            group: ["spotId"],
+        const allSpot = await Spot.findAll({
             limit: size,
             offset: size * (page - 1),
-          });
+            include: Review,
+            attributes: [Review, [fn("AVG", col("stars")), "avgRating"]]
+        });
+        
+        // const avgR = await Review.findAll({
+        //     attributes: ["spotId", [fn("AVG", col("stars")), "avgRating"]],
+        //     group: ["spotId"],
+        //     where:
+        //   });
 
 
         res.json({
-            Spots: allSpot,
-            avgR
+            Spots: {allSpot,
+            avgR}
         })
     }
 );
+
+router.get('/current', requireAuth, async (req, res)=>{
+    const ownerId = req.user.id;
+    const spot = await Spot.findAll({
+        where:{
+            ownerId
+        }
+    });
+    res.json({"Spots": spot})
+});
+
+router.get('/:spotId', async (req, res)=>{
+    const spot = await Spot.findByPk(req.params.spotId,{
+        include:{
+            model: SpotImage,
+            attributes:{
+                exclude:["createdAt", "updatedAt"]
+            }
+        }
+    });
+    if(!spot){
+        res.status(404);
+        res.json({"message": "Spot couldn't be found"})
+    }else{
+
+        res.json(spot)
+    }
+});
 
 router.post("/:spotId/images", requireAuth, async (req, res, next)=>{
     const userId = req.user.id;
@@ -98,7 +130,7 @@ router.post("/:spotId/images", requireAuth, async (req, res, next)=>{
      }
         
         else{
-            
+            res.status(404)
             res.json({
                 "message": "spot couldn't be found"
             })
@@ -121,7 +153,7 @@ router.post('/',validate, requireAuth, async (req, res, next)=>{
         description,
         price
     });
-   
+   res.status(201)
     res.json({newSpot});
 });
 
@@ -159,6 +191,7 @@ router.put('/:spotId',validate, requireAuth, async (req, res, next)=>{
             "spot":spotToUp
         })
      }else{
+        res.status(404);
         res.json({
             "message": "spot couldn't be found"
         })
@@ -189,6 +222,7 @@ router.delete('/:spotId', requireAuth, async (req, res, next)=>{
         })
      } 
      else{
+        res.status(404)
         res.json({
             "message": "Spot couldn't be found"
           })
