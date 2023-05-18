@@ -1,6 +1,6 @@
 const express = require('express');
 const {} = require('sequelize');
-const {User, Spot, SpotImage, Review, ReviewImage} = require("../../db/models");
+const {User, Spot, SpotImage, Review, ReviewImage, Booking} = require("../../db/models");
 const router = express.Router();
 const { fn, col } = require("sequelize");
 const {requireAuth} = require('../../utils/auth');
@@ -39,22 +39,31 @@ const validate = [
     handleValidationErrors
   ];
 
-// router.get(
-//     '/', async(req, res, next)=>{
-//         const allSpot = await Spot.findAll();
+router.get(
+    '/', async(req, res, next)=>{
+        let { page, size } = req.query;
+  
+        if (isNaN(page) || page < 1) page = 1;
+        if (isNaN(size) || size < 1) size = 20;
+        page = parseInt(page);
+        size = parseInt(size);
 
-//         const avgR = await Review.findAll({
-//             attributes: ["spotId", [fn("AVG", col("stars")), "avgRating"]],
-//             group: ["spotId"],
-//           });
+        const allSpot = await Spot.findAll();
+
+        const avgR = await Review.findAll({
+            attributes: ["spotId", [fn("AVG", col("stars")), "avgRating"]],
+            group: ["spotId"],
+            limit: size,
+            offset: size * (page - 1),
+          });
 
 
-//         res.json({
-//             Spots: allSpot,
-//             avgR
-//         })
-//     }
-// );
+        res.json({
+            Spots: allSpot,
+            avgR
+        })
+    }
+);
 
 router.post("/:spotId/images", requireAuth, async (req, res, next)=>{
     const userId = req.user.id;
@@ -219,6 +228,59 @@ router.post('/:spotId/reviews', requireAuth,async (req, res)=>{
     res.json({
         newReview
     })
+});
+
+router.get('/:spotId/bookings', requireAuth, async (req, res, next)=>{
+    const spotId = req.params.spotId;
+    const owner = await Spot.findByPk(spotId)
+    if(owner.ownerId === req.user.id){
+        const Bookings = await Booking.findAll({
+            where:{
+               spotId 
+            },
+            include:[{
+                model: User,
+                attributes:["id", "firstName", "lastName"]
+            }]
+        });
+        res.json({Bookings})
+    }else{
+        const Bookings = await Booking.findAll({
+            where:{
+                spotId
+            },
+            attributes:["spotId", "startDate", "endDate"]
+        });
+        res.json({Bookings})
+    }
+ // res.json({"owner":owner.ownerId, "true or false": owner.ownerId === req.user.id, "userId": req.user.id}) 
+});
+
+router.post('/:spotId/bookings', requireAuth, async (req, res, next)=>{
+    const userId = req.user.id;
+    const spot = await Spot.findAll({
+        where:{
+            ownerId: userId
+        },
+        attributes: ['id']
+    });
+    const spotId = req.params.spotId
+    // console.log(spotId)
+    
+    let idArray = [];
+    for(let i = 0; i< spot.length; i++){
+        idArray.push(spot[i].id);
+    };
+    if(!idArray.includes(parseInt(spotId))){
+        const {startDate, endDate} = req.body;
+      const  newBooking = await Booking.create({
+        spotId,
+        userId,
+        startDate,
+        endDate
+        });
+        res.json(newBooking);
+    }
 })
 
 module.exports = router;
