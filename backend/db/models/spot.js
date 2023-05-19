@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     lng: DataTypes.DECIMAL,
     name:{
       type: DataTypes.STRING,
+      allowNull:false,
       validate:{
         lessThan(val){
           if(val.length > 49){
