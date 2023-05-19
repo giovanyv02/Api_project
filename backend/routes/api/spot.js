@@ -51,8 +51,7 @@ router.get(
         const allSpot = await Spot.findAll({
             limit: size,
             offset: size * (page - 1),
-            include: Review,
-            attributes: [Review, [fn("AVG", col("stars")), "avgRating"]]
+            
         });
         
         // const avgR = await Review.findAll({
@@ -63,8 +62,9 @@ router.get(
 
 
         res.json({
-            Spots: {allSpot,
-            avgR}
+            "Spots": allSpot,
+            page,
+            size
         })
     }
 );
@@ -241,7 +241,8 @@ router.get('/:spotId/reviews', async (req, res, next)=>{
             attributes: ["id", "url"]
         }
     })
-    if(!Review[0]){
+    if(!Reviews[0]){
+        res.status(404);
         res.json({
             "message": "Spot couldn't be found"
           })
@@ -249,71 +250,160 @@ router.get('/:spotId/reviews', async (req, res, next)=>{
     res.json({Reviews})
 });
 
-router.post('/:spotId/reviews', requireAuth,async (req, res)=>{
+
+
+router.post('/:spotId/reviews', requireAuth, async (req, res)=>{
     const spotId = req.params.spotId;
     const userId = req.user.id;
+    const userRev = await Review.findOne({
+        where:{
+            spotId,
+            userId
+        }
+    });
+    
+    if(userRev){
+        res.status(500);
+        res.json({
+            "message": "User already has a review for this spot"
+          })
+    }else{
     const {review, stars} = req.body;
-    const newReview = await Review.create({
-        spotId,
-        userId,
-        review,
-        stars
-    })
-    res.json({
-        newReview
-    })
+   if(stars < 1 || stars > 5){
+    res.status(400);
+    res.json({"error":{"stars": "Stars must be an integer from 1 to 5"}})
+   }
+   if(!review){
+    res.status(400);
+    res.json({"error":{"review": "Review text is required"}})
+   }else{
+
+       try{
+           const newReview = await Review.create({
+               spotId,
+               userId,
+               review,
+               stars
+           });
+          res.status(201)
+           res.json(
+               newReview
+           )
+             } catch(error){
+               res.status(404);
+               res.json({
+                   "message": "Spot couldn't be found"
+                 })
+             }
+   }
+}
 });
 
 router.get('/:spotId/bookings', requireAuth, async (req, res, next)=>{
     const spotId = req.params.spotId;
     const owner = await Spot.findByPk(spotId)
-    if(owner.ownerId === req.user.id){
-        const Bookings = await Booking.findAll({
-            where:{
-               spotId 
-            },
-            include:[{
-                model: User,
-                attributes:["id", "firstName", "lastName"]
-            }]
-        });
-        res.json({Bookings})
+    if(!owner){
+        res.status(404);
+        res.json({
+            "message": "Spot couldn't be found"
+          });
     }else{
-        const Bookings = await Booking.findAll({
-            where:{
-                spotId
-            },
-            attributes:["spotId", "startDate", "endDate"]
-        });
-        res.json({Bookings})
+
+        if(owner.ownerId === req.user.id){
+            const Bookings = await Booking.findAll({
+                where:{
+                   spotId 
+                },
+                include:[{
+                    model: User,
+                    attributes:["id", "firstName", "lastName"]
+                }]
+            });
+            res.json({Bookings})
+        }else{
+            const Bookings = await Booking.findAll({
+                where:{
+                    spotId
+                },
+                attributes:["spotId", "startDate", "endDate"]
+            });
+            res.json({Bookings})
+        }
     }
  // res.json({"owner":owner.ownerId, "true or false": owner.ownerId === req.user.id, "userId": req.user.id}) 
 });
 
+const changeDate = (date)=>{
+  return   parseInt(date.split('-').join(""))
+}
+
+
 router.post('/:spotId/bookings', requireAuth, async (req, res, next)=>{
     const userId = req.user.id;
-    const spot = await Spot.findAll({
-        where:{
-            ownerId: userId
-        },
-        attributes: ['id']
-    });
-    const spotId = req.params.spotId
-    // console.log(spotId)
-    
-    let idArray = [];
-    for(let i = 0; i< spot.length; i++){
-        idArray.push(spot[i].id);
-    };
-    if(!idArray.includes(parseInt(spotId))){
-        const {startDate, endDate} = req.body;
-      const  newBooking = await Booking.create({
-        spotId,
-        userId,
-        startDate,
-        endDate
-        });
-        res.json(newBooking);
+    const {startDate, endDate} = req.body;
+    if(changeDate(startDate) >= changeDate(endDate)){
+        res.status(400);
+        res.json({"errors": {
+            "endDate": "endDate cannot be on or before startDate"
+          }})
+    }else{
+        // const booking = await Booking.findAll({
+        //     where:{
+        //         spotId: req.params.spotId
+        //     },
+        //     attributes:["startDate", "endDate"]
+        // });
+        // let obj = {message:"Sorry, this spot is already booked for the specified dates" }
+        // for(let i=0; i< booking.length; i++){
+        //     let stat = booking[i].startDate;
+        //     console.log(booking)
+        //     console.log(stat)
+        //     stat = stat.slice(1, 8)
+        //     let end = booking[i].endDate.slice(0,10) ;
+        //     if(changeDate(startDate) > changeDate(stat) && changeDate(startDate) < changeDate(end)){
+        //        obj.startDate = "Start date conflicts with an existing booking";
+        //     }if(changeDate(endDate) > changeDate(end) && changeDate(endDate) < changeDate(end)){         
+        //        obj.endDate = "End date conflicts with an existing booking";
+        //     }
+        // }
+        // if(obj.startDate || obj.endDate){
+        //     res.status(403);
+        //     req.json(obj);
+        // }else
+      //  {
+
+            // res.json(booking)
+            const spot = await Spot.findAll({
+                where:{
+                    ownerId: userId
+                },
+                attributes: ['id']
+            });
+            const spotId = req.params.spotId
+            // console.log(spotId)
+            
+            let idArray = [];
+            for(let i = 0; i< spot.length; i++){
+                idArray.push(spot[i].id);
+            };
+            try{
+                if(!idArray.includes(parseInt(spotId))){
+                  const  newBooking = await Booking.create({
+                    spotId,
+                    userId,
+                    startDate,
+                    endDate
+                    });
+                    res.json(newBooking);
+                }
+                
+            } catch(error){
+                res.status(404);
+                res.json({
+                    "message": "Spot couldn't be found"
+                  })
+            }
+      //  }
     }
 })
 

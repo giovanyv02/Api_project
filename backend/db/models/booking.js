@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
       Booking.belongsTo(models.Spot, {
-        foreignKey: "userId",
+        foreignKey: "spotId",
         onDelete: "CASCADE",
       });
 
