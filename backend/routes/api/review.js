@@ -77,7 +77,7 @@ router.put('/:reviewId', requireAuth, async (req, res, next)=>{
     for(let i = 0; i< review.length; i++){
         idArray.push(review[i].id);
     }
-    
+
 
     if(idArray.includes(parseInt(reviewId))){
        const newReview = await Review.findByPk(req.params.reviewId);
@@ -94,7 +94,36 @@ router.put('/:reviewId', requireAuth, async (req, res, next)=>{
             "message": "Review couldn't be found"
         })
     }
-} )
+} );
+
+router.delete('/:reviewId', requireAuth, async (req, res, next)=>{
+    const userId = req.user.id;
+    const review = await Review.findAll({
+        where:{
+            userId
+        },
+        attributes:["id"]
+    });
+    const reviewId = req.params.reviewId
+
+    let idArray = [];
+    for(let i = 0; i< review.length; i++){
+        idArray.push(review[i].id);
+    }
+
+
+    if(idArray.includes(parseInt(reviewId))){
+       const deleR = await Review.findByPk(req.params.reviewId);
+        deleR.destroy();
+        res.json({
+            "message": "Successfully deleted"
+        })
+    } else{
+        res.json({
+            "message": "Review couldn't be found"
+        })
+    }
+})
 
 
 
