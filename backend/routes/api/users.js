@@ -36,8 +36,8 @@ const validateSignup = [
   
       const safeUser = {
        
-        first_Name: user.firstName,
-        last_Name: user.lastName,
+        firstName: user.firstName,
+        lastName: user.lastName,
         id: user.id,
         username: user.username,
         email: user.email

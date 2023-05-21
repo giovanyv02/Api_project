@@ -12,13 +12,21 @@ router.delete('/:imageId', requireAuth, async (req, res, next)=>{
             ownerId
         }
     });
-    let idArray = [];
-    for(let i = 0; i< spots.length; i++){
-        idArray.push(spots[i].id)
-    };
-    if(idArray.includes(image.spotId)){
-        image.destroy();
-        res.json({"message": "Successfully deleted"})
+    if(image){
+        let idArray = [];
+        for(let i = 0; i< spots.length; i++){
+            idArray.push(spots[i].id)
+        };
+        if(idArray.includes(image.spotId)){
+            image.destroy();
+            res.json({"message": "Successfully deleted"})
+        }else{
+            res.status(404)
+            res.json({
+                "message": "Spot Image couldn't be found"
+              })
+        }
+
     }else{
         res.status(404)
         res.json({

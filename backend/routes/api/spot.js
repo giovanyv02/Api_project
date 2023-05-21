@@ -2,7 +2,7 @@ const express = require('express');
 const {sequelize} = require('sequelize');
 const {User, Spot, SpotImage, Review, ReviewImage, Booking} = require("../../db/models");
 const router = express.Router();
-const { fn, col } = require("sequelize");
+const { fn, col, Op } = require("sequelize");
 const {requireAuth} = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -49,20 +49,59 @@ router.get(
         size = parseInt(size);
 
         const allSpot = await Spot.findAll({
+            include:[{
+                model: SpotImage
+            },
+            {
+                model: Review
+            }],
             limit: size,
             offset: size * (page - 1),
             
         });
         
         // const avgR = await Review.findAll({
-        //     attributes: ["spotId", [fn("AVG", col("stars")), "avgRating"]],
+        //     attributes: [ [fn("AVG", col("stars")), "avgRating"]],
         //     group: ["spotId"],
-        //     where:
-        //   });
+        // });
+ 
+        // ell = [];
+        // avgR.forEach(ele=>{
+        //     ell.push(ele.toJSON())
+        // })
+        // console.log("anmwyyy",ell[0].avgRating)
+        // for(let i = 0; i < ill.length; i++){
+        //     ill[i].avgRating = ell[i].avgRating;  
+        // };
+        ill = [];
+        allSpot.forEach(element => {
+            ill.push(element.toJSON())
+        });
 
+        ill.forEach(eles=>{
+            let total = eles.Reviews
+            if(total[0]){
+
+                let sum = 0;
+                for(let i = 0; i < total.length; i++){
+                    sum +=total[i].stars
+                }
+                sum /= total.length
+                eles.avgRating = sum;
+            }
+            //     (a.stars + b.stars)
+            // })
+            eles.SpotImages.forEach(image=>{
+                eles.previewImage = image.url;
+            });
+            delete eles.SpotImages;
+            delete eles.Reviews
+        })
+
+        
 
         res.json({
-            "Spots": allSpot,
+            "Spots": ill,
             page,
             size
         })
@@ -74,26 +113,112 @@ router.get('/current', requireAuth, async (req, res)=>{
     const spot = await Spot.findAll({
         where:{
             ownerId
-        }
+        },
+        include:[
+            {
+                model: SpotImage
+            },
+            {
+                model: Review
+            }
+        ]
     });
-    res.json({"Spots": spot})
+    // allOwnerSpot = [];
+    // spot.forEach(ele=>{
+    //     allOwnerSpot.push(ele.id)
+    // });
+    
+    // const avgR = await Review.findAll({
+    //     where:{
+    //         spotId:{
+    //             [Op.in]: allOwnerSpot
+    //         }
+    //     },
+    //     attributes: [ [fn("AVG", col("stars")), "avgRating"]],
+    //     group: ["spotId"],
+    // });
+
+    // const spotImage = await SpotImage.findAll({
+    //     where:{
+    //         spotId:{
+    //             [Op.in]: allOwnerSpot
+    //         }
+    //     },
+    // })
+
+    // ell = [];
+    // avgR.forEach(ele=>{
+    //     ell.push(ele.toJSON())
+    // })
+    ill = [];
+    spot.forEach(element => {
+        ill.push(element.toJSON())
+    });
+    // for(let i = 0; i < ill.length; i++){
+    //     ill[i].avgRating = ell[i].avgRating;
+    //     ill[i].previewImage = spotImage[i].url;
+        
+    // };
+    ill.forEach(eles=>{
+        let total = eles.Reviews
+        if(total[0]){
+
+            let sum = 0;
+            for(let i = 0; i < total.length; i++){
+                sum +=total[i].stars
+            }
+            sum /= total.length
+            eles.avgRating = sum;
+        }
+        //     (a.stars + b.stars)
+        // })
+        eles.SpotImages.forEach(image=>{
+            eles.previewImage = image.url;
+        });
+        delete eles.SpotImages;
+        delete eles.Reviews
+    })
+    
+    res.json({"Spots": ill})
 });
 
+
+
 router.get('/:spotId', async (req, res)=>{
-    const spot = await Spot.findByPk(req.params.spotId,{
-        include:{
-            model: SpotImage,
-            attributes:{
-                exclude:["createdAt", "updatedAt"]
-            }
-        }
-    });
+    const spot = await Spot.findByPk(req.params.spotId);
     if(!spot){
         res.status(404);
         res.json({"message": "Spot couldn't be found"})
     }else{
-
-        res.json(spot)
+        const spotImage = await SpotImage.findAll({
+            where:{
+                spotId: spot.id
+            },
+            attributes:["id", "url", "preview"]
+        })
+        const owner = await User.findByPk(spot.ownerId,{
+            attributes:["id", "firstName", "lastName"]
+        });
+        const numreview = await Review.count({
+            where:{
+                spotId: spot.id
+            }
+        });
+        const avgR = await Review.findAll({
+            where:{
+                spotId: spot.ownerId
+            },
+            attributes: [ [fn("AVG", col("stars")), "avgRating"]],
+            
+        });
+        const spat = spot.toJSON();
+        const avg = avgR[0].toJSON();
+        spat.numReviews = numreview;
+        spat.avgStarRating = avg.avgRating;
+        spat.SpotImages = spotImage;
+        spat.Owner = owner;
+        // console.log(numreview,spat,)
+        res.json(spat)
     }
 });
 
@@ -231,17 +356,22 @@ router.delete('/:spotId', requireAuth, async (req, res, next)=>{
 
 router.get('/:spotId/reviews', async (req, res, next)=>{
     const spotId = req.params.spotId;
+    const spot = await Spot.findByPk(spotId)
     const Reviews = await Review.findAll({
         where:{
             spotId
         },
-        include: User,
-        include:{
+        include:[{
+            model: User,
+            attributes:["id", "firstName", "lastName"]
+        },
+        {
             model: ReviewImage,
-            attributes: ["id", "url"]
+            attributes:["id", "url"]
         }
+    ]
     })
-    if(!Reviews[0]){
+    if(!spot){
         res.status(404);
         res.json({
             "message": "Spot couldn't be found"
@@ -347,30 +477,34 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next)=>{
             "endDate": "endDate cannot be on or before startDate"
           }})
     }else{
-        // const booking = await Booking.findAll({
-        //     where:{
-        //         spotId: req.params.spotId
-        //     },
-        //     attributes:["startDate", "endDate"]
-        // });
-        // let obj = {message:"Sorry, this spot is already booked for the specified dates" }
-        // for(let i=0; i< booking.length; i++){
-        //     let stat = booking[i].startDate;
-        //     console.log(booking)
-        //     console.log(stat)
-        //     stat = stat.slice(1, 8)
-        //     let end = booking[i].endDate.slice(0,10) ;
-        //     if(changeDate(startDate) > changeDate(stat) && changeDate(startDate) < changeDate(end)){
-        //        obj.startDate = "Start date conflicts with an existing booking";
-        //     }if(changeDate(endDate) > changeDate(end) && changeDate(endDate) < changeDate(end)){         
-        //        obj.endDate = "End date conflicts with an existing booking";
-        //     }
-        // }
-        // if(obj.startDate || obj.endDate){
-        //     res.status(403);
-        //     req.json(obj);
-        // }else
-      //  {
+        const booking = await Booking.findAll({
+            where:{
+                spotId: req.params.spotId
+            },
+            attributes:["startDate", "endDate"]
+        });
+        let obj = {message:"Sorry, this spot is already booked for the specified dates" }
+           let bookingJ = [];
+            booking.forEach(ele=>{
+                bookingJ.push(ele.toJSON())
+       })
+        for(let i=0; i< bookingJ.length; i++){
+            let stat = bookingJ[i].startDate;
+            stat = stat.slice(0, 10)
+            
+            let end = bookingJ[i].endDate.slice(0,10) ;
+          
+            if(changeDate(startDate) >= changeDate(stat) && changeDate(startDate) <= changeDate(end)){
+               obj.startDate = "Start date conflicts with an existing booking";
+            }if(changeDate(endDate) >= changeDate(end) && changeDate(endDate) <= changeDate(end)){         
+               obj.endDate = "End date conflicts with an existing booking";
+            }
+        }
+        if(obj.startDate || obj.endDate){
+            res.status(403);
+            res.json(obj);
+        }else
+       {
 
             // res.json(booking)
             const spot = await Spot.findAll({
@@ -395,6 +529,9 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next)=>{
                     endDate
                     });
                     res.json(newBooking);
+                }else{
+                    res.status(403);
+                    res.json({"message": "sorry you can't book your own place"})
                 }
                 
             } catch(error){
@@ -403,7 +540,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next)=>{
                     "message": "Spot couldn't be found"
                   })
             }
-      //  }
+       }
     }
 })
 

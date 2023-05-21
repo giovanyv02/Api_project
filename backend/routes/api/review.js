@@ -10,25 +10,25 @@ router.get('/current', async (req, res, next)=>{
         where:{
             userId: req.user.id
         },
-        include:{
+        include:[{
             model: User,
             attributes:["id", "firstName", "lastName"]
         },
-        include:{
+        {
             model: Spot,
             attributes:["id", "ownerId",  "address", "address", "city", "state", "country", "lat", "lng",
             "name",
             "price",
-            "previewImage"]
+            ]
         },
-        include:{
+        {
             model: ReviewImage,
             attributes: ['id', "url"]
-        }
+        }]
     })
 
     res.json({
-        allReview
+        "Reviews":allReview
     })
 });
 
