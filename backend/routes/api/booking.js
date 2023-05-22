@@ -49,7 +49,13 @@ router.get('/current', requireAuth, async (req, res, next)=>{
             }
         });
         
-        bookingJ[i].Spot.previewImage = preview.toJSON().url;
+        if(preview){
+            bookingJ[i].Spot.previewImage = preview.toJSON().url;
+        }else{
+            bookingJ[i].Spot.previewImage = "nothing for now"
+
+        }
+        
     }
 
     res.json({bookingJ})
@@ -58,6 +64,115 @@ router.get('/current', requireAuth, async (req, res, next)=>{
 router.put('/:bookingId', requireAuth, async (req, res, next)=>{
     const userId = req.user.id;
     const {startDate, endDate} = req.body;
+
+    const booking = await Booking.findOne({
+        where:{
+            id: req.params.bookingId
+        }
+       });
+       if(booking){
+        if(booking.userId === parseInt(req.user.id)){
+           
+            if(changeDate(booking.startDate) < changeDate(currentDate)){
+                res.status(403);
+                res.json({
+                    "message": "Bookings that have been started can't be deleted"
+                  })
+            }else{
+                if(changeDate(startDate) >= changeDate(endDate)){
+                    res.status(400);
+                    res.json({"errors": {
+                        "endDate": "endDate cannot be on or before startDate"
+                      }})
+                } else{ 
+                    const spotB = await Booking.findOne({
+                        where:{
+                            id: req.params.bookingId
+                        },
+                        attributes:{
+                            include:["id"]
+                        }
+                    });
+                   if(spotB){
+                    const booking = await Booking.findAll({
+                        where:{
+                            spotId: spotB.spotId,
+                            id:{
+                                [Op.not]: req.params.bookingId
+                            }
+                        },
+                        attributes:["startDate", "endDate"]
+                    });
+                    let obj = {message:"Sorry, this spot is already booked for the specified dates" }
+                       let bookingJ = [];
+                        booking.forEach(ele=>{
+                            bookingJ.push(ele.toJSON())
+                   })
+                    for(let i=0; i< bookingJ.length; i++){
+                        let stat = bookingJ[i].startDate;
+                        stat = stat.slice(0, 10)
+                        
+                        let end = bookingJ[i].endDate.slice(0,10) ;
+                      
+                        if(changeDate(startDate) >= changeDate(stat) && changeDate(startDate) <= changeDate(end)){
+                           obj.startDate = "Start date conflicts with an existing booking";
+                        }if(changeDate(endDate) >= changeDate(end) && changeDate(endDate) <= changeDate(end)){         
+                           obj.endDate = "End date conflicts with an existing booking";
+                        }
+                    }
+                    if(obj.startDate || obj.endDate){
+                        res.status(403);
+                        res.json(obj);
+                    }
+                    
+                
+                    const bookingb = await Booking.findAll({
+                        where:{
+                            userId
+                        },
+                        attributes:["id"]
+                    });
+                    const bookingId = req.params.bookingId;
+                    
+                    let idArray = [];
+                    for(let i = 0; i< bookingb.length; i++){
+                        idArray.push(bookingb[i].id);
+                    }
+                    if(idArray.includes(parseInt(bookingId))){
+                       // const newBooking = await Booking.findByPk(bookingId);
+                        spotB.update({
+                            startDate,
+                            endDate
+                        });
+                        console.log(spotB)
+                        res.json(spotB)
+                    }else{
+                        res.status(404)
+                        res.json({
+                            "message": "Booking couldn't be found"
+                        })
+                    }
+                
+                   }else{
+                    res.status(404)
+                    res.json({
+                        "message": "Booking couldn't be found"
+                    })
+                    }
+                }
+            }
+        }else{
+            res.status(404)
+            res.json({
+                "message": "Booking couldn't be found"
+            })
+        }
+       } else{
+        res.status(404)
+        res.json({
+            "message": "Booking couldn't be found"
+        })
+       }
    
 // if(changeDate(startDate) < changeDate(currentDate)){
 //     res.status(403);
@@ -65,88 +180,88 @@ router.put('/:bookingId', requireAuth, async (req, res, next)=>{
 //         "message": "Past bookings can't be modified"
 //       })
 // } else
- if(changeDate(startDate) >= changeDate(endDate)){
-    res.status(400);
-    res.json({"errors": {
-        "endDate": "endDate cannot be on or before startDate"
-      }})
-} else{ 
-    const spotB = await Booking.findOne({
-        where:{
-            id: req.params.bookingId
-        },
-        attributes:{
-            include:["id"]
-        }
-    });
-   if(spotB){
-    const booking = await Booking.findAll({
-        where:{
-            spotId: spotB.spotId,
-            id:{
-                [Op.not]: req.params.bookingId
-            }
-        },
-        attributes:["startDate", "endDate"]
-    });
-    let obj = {message:"Sorry, this spot is already booked for the specified dates" }
-       let bookingJ = [];
-        booking.forEach(ele=>{
-            bookingJ.push(ele.toJSON())
-   })
-    for(let i=0; i< bookingJ.length; i++){
-        let stat = bookingJ[i].startDate;
-        stat = stat.slice(0, 10)
+//  if(changeDate(startDate) >= changeDate(endDate)){
+//     res.status(400);
+//     res.json({"errors": {
+//         "endDate": "endDate cannot be on or before startDate"
+//       }})
+// } else{ 
+//     const spotB = await Booking.findOne({
+//         where:{
+//             id: req.params.bookingId
+//         },
+//         attributes:{
+//             include:["id"]
+//         }
+//     });
+//    if(spotB){
+//     const booking = await Booking.findAll({
+//         where:{
+//             spotId: spotB.spotId,
+//             id:{
+//                 [Op.not]: req.params.bookingId
+//             }
+//         },
+//         attributes:["startDate", "endDate"]
+//     });
+//     let obj = {message:"Sorry, this spot is already booked for the specified dates" }
+//        let bookingJ = [];
+//         booking.forEach(ele=>{
+//             bookingJ.push(ele.toJSON())
+//    })
+//     for(let i=0; i< bookingJ.length; i++){
+//         let stat = bookingJ[i].startDate;
+//         stat = stat.slice(0, 10)
         
-        let end = bookingJ[i].endDate.slice(0,10) ;
+//         let end = bookingJ[i].endDate.slice(0,10) ;
       
-        if(changeDate(startDate) >= changeDate(stat) && changeDate(startDate) <= changeDate(end)){
-           obj.startDate = "Start date conflicts with an existing booking";
-        }if(changeDate(endDate) >= changeDate(end) && changeDate(endDate) <= changeDate(end)){         
-           obj.endDate = "End date conflicts with an existing booking";
-        }
-    }
-    if(obj.startDate || obj.endDate){
-        res.status(403);
-        res.json(obj);
-    }
+//         if(changeDate(startDate) >= changeDate(stat) && changeDate(startDate) <= changeDate(end)){
+//            obj.startDate = "Start date conflicts with an existing booking";
+//         }if(changeDate(endDate) >= changeDate(end) && changeDate(endDate) <= changeDate(end)){         
+//            obj.endDate = "End date conflicts with an existing booking";
+//         }
+//     }
+//     if(obj.startDate || obj.endDate){
+//         res.status(403);
+//         res.json(obj);
+//     }
     
 
-    const bookingb = await Booking.findAll({
-        where:{
-            userId
-        },
-        attributes:["id"]
-    });
-    const bookingId = req.params.bookingId;
+//     const bookingb = await Booking.findAll({
+//         where:{
+//             userId
+//         },
+//         attributes:["id"]
+//     });
+//     const bookingId = req.params.bookingId;
     
-    let idArray = [];
-    for(let i = 0; i< bookingb.length; i++){
-        idArray.push(bookingb[i].id);
-    }
-    if(idArray.includes(parseInt(bookingId))){
-       // const newBooking = await Booking.findByPk(bookingId);
-        spotB.update({
-            startDate,
-            endDate
-        });
-        console.log(spotB)
-        res.json(spotB)
-    }else{
-        res.status(404)
-        res.json({
-            "message": "Booking couldn't be found"
-        })
-    }
+//     let idArray = [];
+//     for(let i = 0; i< bookingb.length; i++){
+//         idArray.push(bookingb[i].id);
+//     }
+//     if(idArray.includes(parseInt(bookingId))){
+//        // const newBooking = await Booking.findByPk(bookingId);
+//         spotB.update({
+//             startDate,
+//             endDate
+//         });
+//         console.log(spotB)
+//         res.json(spotB)
+//     }else{
+//         res.status(404)
+//         res.json({
+//             "message": "Booking couldn't be found"
+//         })
+//     }
 
-   }else{
-    res.status(404)
-    res.json({
-        "message": "Booking couldn't be found"
-    })
-    }
+//    }else{
+//     res.status(404)
+//     res.json({
+//         "message": "Booking couldn't be found"
+//     })
+//     }
    
-}
+// }
 
 });
 
@@ -159,8 +274,7 @@ router.delete('/:bookingId', requireAuth, async (req, res, next)=>{
    
     if(booking){
         if(booking.userId === parseInt(req.user.id)){
-            console.log(booking.startDate, "and", changeDate(booking.startDate))
-            console.log(currentDate, "and", changeDate(currentDate))
+           
             if(changeDate(booking.startDate) < changeDate(currentDate)){
                 res.status(403);
                 res.json({

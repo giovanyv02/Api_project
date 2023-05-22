@@ -280,7 +280,7 @@ router.post('/',validate, requireAuth, async (req, res, next)=>{
         price
     });
    res.status(201)
-    res.json({newSpot});
+    res.json(newSpot);
 });
 
 router.put('/:spotId',validate, requireAuth, async (req, res, next)=>{
