@@ -206,11 +206,12 @@ router.get('/:spotId', async (req, res)=>{
         });
         const avgR = await Review.findAll({
             where:{
-                spotId: spot.ownerId
+                spotId: spot.id
             },
             attributes: [ [fn("AVG", col("stars")), "avgRating"]],
             
         });
+        console.log("spot", spot.ownerId,)
         const spat = spot.toJSON();
         const avg = avgR[0].toJSON();
         spat.numReviews = numreview;
@@ -528,7 +529,23 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next)=>{
                     startDate,
                     endDate
                     });
-                    res.json(newBooking);
+                    const deookings = await Booking.findOne({
+                        where:{
+                            userId,
+                            spotId,
+                            startDate:{
+                                [Op.startsWith]: startDate
+                            },
+                            endDate:{
+                                [Op.startsWith]: endDate
+                            }
+                        },
+                        attributes:{
+                            include:["id"]
+                        },
+                    });
+                    
+                    res.json(deookings);
                 }else{
                     res.status(403);
                     res.json({"message": "sorry you can't book your own place"})
