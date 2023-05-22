@@ -74,6 +74,9 @@ router.put('/:bookingId', requireAuth, async (req, res, next)=>{
     const spotB = await Booking.findOne({
         where:{
             id: req.params.bookingId
+        },
+        attributes:{
+            include:["id"]
         }
     });
    if(spotB){
@@ -127,6 +130,7 @@ router.put('/:bookingId', requireAuth, async (req, res, next)=>{
             startDate,
             endDate
         });
+        console.log(spotB)
         res.json(spotB)
     }else{
         res.status(404)
