@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink, Route} from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import { allSpots } from "../../store/spots";
 const SpotComponent = ()=>{
     const dispatch = useDispatch();
@@ -11,15 +11,18 @@ const SpotComponent = ()=>{
     const spots = useSelector(state=> Object.values(state.spots))
     //  if(spots.length) return null;
     return (<>
-    <h2>hmmm</h2>
+    
        <div className="page">
         {spots.map(ele=>
           
                
             <div className="spotdiv">
+                <NavLink key={ele.id} to={`/spots/${ele.id}`}>
                 <div>
                      <h1>{ele.name}</h1>
                  </div>
+
+                </NavLink>
                  <div>
                      <img src={ele.previewImage} alt={ele.description}/>
                  </div>
