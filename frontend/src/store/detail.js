@@ -8,6 +8,7 @@ const getOne = (spot)=>({
 });
 
 export const getOneThunk=(id)=> async dispatch=>{
+    console.log("id2", id)
     const res = await csrfFetch(`/api/spots/${id}`);
     if(res.ok){
        const spot = await res.json();

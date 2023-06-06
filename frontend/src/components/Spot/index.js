@@ -6,10 +6,11 @@ const SpotComponent = ()=>{
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(allSpots())
+       
     },[dispatch]);
-
+        
     const spots = useSelector(state=> Object.values(state.spots))
-    //  if(spots.length) return null;
+   
     return (<>
     
        <div className="page">

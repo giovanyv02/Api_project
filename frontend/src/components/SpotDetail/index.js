@@ -2,28 +2,42 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { getOneThunk } from "../../store/detail";
-
+import {thunkOneReview} from "../../store/reviews"
 const SpotDetailComponent = () => {
+    
     const dispatch = useDispatch();
     const { id } = useParams()
-
     useEffect(() => {
         dispatch(getOneThunk(id))
-    }, [dispatch]);
+        
+        console.log("yes I ran")
+    }, [dispatch, id]);
 
+    useEffect(()=>{
+        dispatch(thunkOneReview(id))
+    }, [dispatch])
+    
     const spot = useSelector(state => state.detail);
-
+    const reviews = useSelector(state=> Object.values(state.reviews))
+    
+    
+    if(!spot.id) return null
+    
+    
+    
 
     return (
         <>
+        
             <div>
+               
                 <h1>{spot.name}</h1>
                 <p>{spot.city}, {spot.state}, {spot.country}</p>
             </div>
             <div>
-                {spot.SpotImages.forEach(ele =>
+                {/* {spot.SpotImages.forEach(ele =>
                     <img src={ele.url} />
-                )}
+                )} */}
             </div>
             <div>
                 <div>
@@ -40,6 +54,15 @@ const SpotDetailComponent = () => {
                     <button >Reserve</button>
                 </div>
 
+            </div>
+            <div>
+               {reviews.map(ele=> 
+               <>
+                <p>{ele.User.firstName}</p>
+                <p>{ele.createdAt}</p>
+                <p>{ele.review}</p>
+               </>
+                )}
             </div>
 
         </>
