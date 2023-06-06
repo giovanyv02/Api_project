@@ -14,6 +14,7 @@ function Navigation({ isLoaded }) {
   if (sessionUser) {
     sessionLinks = (
       <li>
+        <NavLink to="/create/spot">Create a Spot</NavLink>
         <ProfileButton user={sessionUser} />
       </li>
     );
@@ -29,6 +30,7 @@ function Navigation({ isLoaded }) {
           modalComponent={<SignupFormModal />}
         />
       </li>
+      
     );
   }
 

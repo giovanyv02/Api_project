@@ -35,9 +35,9 @@ const SpotDetailComponent = () => {
                 <p>{spot.city}, {spot.state}, {spot.country}</p>
             </div>
             <div>
-                {/* {spot.SpotImages.forEach(ele =>
+                {spot.SpotImages.forEach(ele =>
                     <img src={ele.url} />
-                )} */}
+                )}
             </div>
             <div>
                 <div>

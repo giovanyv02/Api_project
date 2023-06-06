@@ -29,6 +29,7 @@ export const updateSpot = (spotId) => ({
     spotId
 });
 
+
 export const allSpots = () => async dispatch => {
     const res = await csrfFetch("/api/spots");
     const spots = await res.json();
@@ -36,13 +37,17 @@ export const allSpots = () => async dispatch => {
     dispatch(loadSpot(spots));
 };
 
-export const oneSpot = (id) => async dispatch =>{
-    const res = await csrfFetch(`/api/spots/${id}`);
-    if(res.ok){
-       const spot = await res.json();
-
-       dispatch(loadOne(spot));
-    }
+export const addSpot = (newSpot)=> async dispatch =>{
+   const res = await  csrfFetch("/api/spots",{
+    method: "POST",
+    header: { 'Content-Type': 'application/json'},
+    body: JSON.stringify(newSpot)
+   });
+   if(res.ok){
+    const spot = await res.json();
+    dispatch(addNewSpot(spot));
+    return spot.json;
+   }
 }
 
 
@@ -54,6 +59,10 @@ const spotReducer = (state = {}, action) => {
             return { ...state, ...newState }
             case LOAD_ONE:
                 return {...action.spot}
+                case ADD_SPOT:
+                    const np = {};
+                    np[action.spot.id] = action.spot;
+                    return {...state, ...np}
         default:
             return state
     }
