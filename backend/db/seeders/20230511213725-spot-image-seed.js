@@ -11,17 +11,17 @@ module.exports = {
     await queryInterface.bulkInsert(options, [
       {
         spotId: 1,
-        url: "lalalanddotcom",
+        url: "https://a0.muscache.com/im/pictures/miso/Hosting-851950480167538672/original/0802a504-46df-438b-a0d7-69f220ff7803.jpeg?im_w=320",
         preview: true
       },
       {
         spotId: 2,
-        url: "lalalanddotcom",
+        url: "https://a0.muscache.com/im/pictures/734ea6e8-cdb5-46fb-8585-79baab06d430.jpg?im_w=320",
         preview: false
       },
       {
         spotId: 3,
-        url: "lalalanddotcom",
+        url: "https://a0.muscache.com/im/pictures/3a168c9d-e142-4b07-b78f-ba4110e52efa.jpg?im_w=320",
         preview: true
       }
     ])

@@ -25,17 +25,17 @@ const SpotComponent = ()=>{
                  <div>
                      <img className="spotimg" src={ele.previewImage} alt={ele.name}/>
                  </div>
-                 <div>
-                     <div>
-                     <p>{ele.city}</p>
-                     <p>{ele.state}</p>
-                     </div>
-                     <div>{ele.avgRating}</div>
-                 </div>
-                 <div>
-                     <p>{ele.price}</p>
-                 </div>
                 </NavLink>
+                 <div className="underSpot">
+                     <div>
+                     <p className="cityState">{ele.city} {ele.state}</p>
+            
+                     </div>
+                     <div >{ele.avgRating}</div>
+                 </div>
+                 <div>
+                     <p className="spotText"> ${ele.price} night</p>
+                 </div>
              </div> 
          )} 
         </div> 

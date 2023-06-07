@@ -1,24 +1,45 @@
 .allSpotPage{
-    border: 2px solid black;
+ 
     display: grid;
-     grid-template-columns: 1fr 1fr 1fr 1fr;
-    
-}
-body{
-    max-width: 1024px;
-}
-.spotdiv{
+     grid-template-columns: 1fr 1fr 1fr;
+     
+    }
+    body{
+        max-width: 1024px;
+    }
+    .spotdiv{
+   
     text-decoration: none;
+    margin: 0 12px;
 }
 
 .spotimg{
-    height: 900px;
-    width: 300px;
+    height: 300px;
+    width: 100%;
     box-sizing: border-box;
-    border: 2px solid black;
+   
+    border-radius: 13px;
+    
 }
 
-    @media screen and (max-width: 850px){
+.underSpot{
+    display: flex;
+   
+    text-decoration: none;
+    color: black;
+    justify-content: space-between;
+    height: 30px;
+}
+.cityState{
+    text-decoration: none;
+  font-weight: bold;
+    margin-top: 0px;
+}
+.spotText{
+    font-weight: bold;
+}
+
+    @media screen and (max-width: 950px){
         .allSpotPage{
             border: 2px solid  red;
             display: grid;
