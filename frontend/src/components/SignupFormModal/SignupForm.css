@@ -1,0 +1,26 @@
+.signForm{
+    display: grid;
+}
+.signLabel{
+    border: 1px solid black;
+    box-shadow: 2px 2px 2px #767676;
+    margin-bottom: 8px;
+    margin-left: 60px;
+    height: 20px;
+    width: 170px;
+}
+.signDiv{
+    width: 300px;
+}
+
+.signText{
+    color: #FF5A5F;
+    margin-left: 80px;
+}
+.subButton{
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+.errors{
+    color: #FF5A5F;
+}

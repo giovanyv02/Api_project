@@ -6,6 +6,7 @@ import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import "./Navigation.css";
+import logo from "../../img/ab.jpg"
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
@@ -13,36 +14,42 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <li>
+      <div>
         <NavLink to="/create/spot">Create a Spot</NavLink>
         <ProfileButton user={sessionUser} />
-      </li>
+      </div>
     );
   } else {
     sessionLinks = (
-      <li>
+      <div className="headerButton">
         <OpenModalButton
           buttonText="Log In"
+          className="button"
           modalComponent={<LoginFormModal />}
         />
         <OpenModalButton
           buttonText="Sign Up"
           modalComponent={<SignupFormModal />}
         />
-      </li>
+      </div>
       
     );
   }
 
   return (
-    <ul>
-      <li>
+    <>
+    <div className="ulNav">
+      <div  className="logoLi">
         <NavLink exact to="/">
-          Home
+         <img className="logo" src={logo} alt="logo"/>
         </NavLink>
-      </li>
+      </div>
       {isLoaded && sessionLinks}
-    </ul>
+
+    </div>
+    <hr></hr>
+    
+    </>
   );
 }
 

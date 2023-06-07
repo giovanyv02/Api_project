@@ -16,7 +16,7 @@ function OpenModalButton({
     setModalContent(modalComponent);
   };
 
-  return <button onClick={onClick}>{buttonText}</button>;
+  return <button style={{backgroundColor: "#FF5A5F", color:"white", margin:"5px", cursor: "pointer" }} onClick={onClick}>{buttonText}</button>;
 }
 
 export default OpenModalButton;

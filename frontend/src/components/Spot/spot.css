@@ -1,0 +1,27 @@
+.allSpotPage{
+    border: 2px solid black;
+    display: grid;
+     grid-template-columns: 1fr 1fr 1fr 1fr;
+    
+}
+body{
+    max-width: 1024px;
+}
+.spotdiv{
+    text-decoration: none;
+}
+
+.spotimg{
+    height: 900px;
+    width: 300px;
+    box-sizing: border-box;
+    border: 2px solid black;
+}
+
+    @media screen and (max-width: 850px){
+        .allSpotPage{
+            border: 2px solid  red;
+            display: grid;
+            grid-template-columns: 2fr 2fr;
+        }
+    }
