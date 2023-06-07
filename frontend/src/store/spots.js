@@ -45,8 +45,9 @@ export const addSpot = (newSpot)=> async dispatch =>{
    });
    if(res.ok){
     const spot = await res.json();
+   
     dispatch(addNewSpot(spot));
-    return spot.json;
+    return spot;
    }
 }
 
