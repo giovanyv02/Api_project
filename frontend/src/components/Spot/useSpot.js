@@ -3,11 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink} from 'react-router-dom';
 import { loadSpot } from "../../store/oneUserSpot";
 import "./spot.css";
+import { useHistory } from "react-router-dom";
 import OpenModalButton from "../OpenModalButton";
 import DeleteFormModel from "../OpenModalButton/deleForm";
 import UpdateForm from "../CreateSpot/updateSpot";
 
 const OneUserSpotComponent = ()=>{
+    const history = useHistory()
     const dispatch = useDispatch();
     useEffect(()=>{
         dispatch(loadSpot())
@@ -43,11 +45,15 @@ const OneUserSpotComponent = ()=>{
                      <p className="spotText"> ${ele.price} night</p>
                  </div>
                  <div>
-                    <button className="msb" onClick={()=> <UpdateForm id={ele.id}/> }>Update</button>
+                    
+                    <OpenModalButton
+                    buttonText="edit"
+                    modalComponent={<UpdateForm id={ele.id}/>}
+                    />
                     <OpenModalButton 
                     buttonText="Delete"
                     className = "button"
-                    id = {ele.id}
+                   
                     modalComponent={<DeleteFormModel id={ele.id}/>}
                     />
                  </div>

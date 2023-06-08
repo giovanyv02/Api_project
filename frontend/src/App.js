@@ -7,6 +7,7 @@ import SpotComponent from "./components/Spot";
 import SpotDetailComponent from "./components/SpotDetail";
 import CreateForm from "./components/CreateSpot";
 import OneUserSpotComponent from "./components/Spot/useSpot";
+import UpdateForm from "./components/CreateSpot/updateSpot";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -30,6 +31,9 @@ function App() {
         </Route>
         <Route exact path="/mySpots">
         <OneUserSpotComponent />
+        </Route>
+        <Route>
+          <UpdateForm path="/spot/:id/edit"/>
         </Route>
       </Switch>)}
     </>

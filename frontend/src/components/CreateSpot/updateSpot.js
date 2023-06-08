@@ -3,24 +3,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./createForm.css";
-import { addSpot } from "../../store/spots";
+import { addSpot, spotUpdate } from "../../store/spots";
 import {addImageThunk} from "../../store/image";
 
+
 function UpdateForm({id}) {
-    const spot = useSelector(state=> state.spots[id])
+    
+    const spot = useSelector(state=> state.userSpots[id])
+   
   const dispatch = useDispatch();
 
   const [country, setcountry] = useState(spot.country);
-  const [streetAdress, setStreetAdress] = useState(spot.street);
+  const [streetAdress, setStreetAdress] = useState(spot.address);
   const [city, setCity] = useState(spot.city);
   const [state, setState] = useState(spot.state);
   const [description, setDescription] = useState(spot.description);
-  const [title, setTitle] = useState(spot.title);
+  const [title, setTitle] = useState(spot.name);
   const [price, setPrice] = useState(spot.price);
   const [image, setImage] = useState("");
   const [validationErrors, setValidationErrors] = useState({});
   const [run, setRun] = useState("no")
-  const [url1, setUrl1] = useState("");
+  const [url1, setUrl1] = useState(spot.previewImage);
   const [url2, setUrl2] = useState("");
   const [url3, setUrl3] = useState("");
   const [url4, setUrl4] = useState("");
@@ -47,6 +50,7 @@ function UpdateForm({id}) {
   //   if(typeof price != "number") err['price'] = "price must be a number";
   let newSpot = {}
 
+  
   if (!Object.values(err).length) {
 
     newSpot = {
@@ -61,7 +65,6 @@ function UpdateForm({id}) {
       price
     };
   };
-
 
 
   //      if(!streetAdress.length) errors['country'] = "Country can't be empty";
@@ -118,17 +121,17 @@ function UpdateForm({id}) {
   useEffect(() => {
     if (Object.values(newSpot).length && run === "yes") {
       const refun = async () => {
-        const res = await dispatch(addSpot(newSpot))
+        const res = await dispatch(spotUpdate(spot.id,newSpot))
         if(url1){
             const img1 = {"url":url1, "preview": true}
-            dispatch(addImageThunk(res.id, img1));
+            dispatch(addImageThunk(spot.id, img1));
 
         }
         // if(url2) dispatch(addImageThunk(res.id, url2))
         // if(url3) dispatch(addImageThunk(res.id, url3))
         // if(url4) dispatch(addImageThunk(res.id, url4))
         // if(url5) dispatch(addImageThunk(res.id, url5))
-        history.push(`/spots/${res.id}`)
+        history.push(`/spots/${spot.id}`)
 
       }
       refun();
