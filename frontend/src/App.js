@@ -6,6 +6,7 @@ import Navigation from "./components/Navigation";
 import SpotComponent from "./components/Spot";
 import SpotDetailComponent from "./components/SpotDetail";
 import CreateForm from "./components/CreateSpot";
+import OneUserSpotComponent from "./components/Spot/useSpot";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -18,7 +19,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
       <Switch>
-        <Route  path="/spots/:id">
+        <Route exact path="/spots/:id">
           <SpotDetailComponent />
         </Route>
         <Route exact path="/">
@@ -26,6 +27,9 @@ function App() {
         </Route>
         <Route path="/create/spot">
         <CreateForm />
+        </Route>
+        <Route exact path="/mySpots">
+        <OneUserSpotComponent />
         </Route>
       </Switch>)}
     </>

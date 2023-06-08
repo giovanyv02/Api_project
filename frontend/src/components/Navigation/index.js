@@ -16,6 +16,7 @@ function Navigation({ isLoaded }) {
     sessionLinks = (
       <div>
         <NavLink to="/create/spot">Create a Spot</NavLink>
+        <NavLink exact to="/mySpots">Manage spots</NavLink>
         <ProfileButton user={sessionUser} />
       </div>
     );
