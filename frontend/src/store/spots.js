@@ -71,6 +71,7 @@ export const spotUpdate = (id, spottoUp)=> async dispatch=>{
     });
     if (res.ok){
         const uSpot = await res.json()
+        console.log("the spot to update", uSpot.spot)
          // dispatch(updateSpot(uSpot))
           dispatch(uppdateSpot(uSpot))
     }

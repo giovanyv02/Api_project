@@ -38,7 +38,7 @@ const userSpotReducer = (state ={}, action)=>{
             delete n[action.spotId];
             return n
             case UPDATE_SPOT:
-                return {...state, [action.spott.id]:action.spott }          
+                return {...state, [action.spott.spot.id]:action.spott.spot }          
 
            default:
             return state
