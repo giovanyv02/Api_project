@@ -74,7 +74,7 @@ const SpotDetailComponent = () => {
                         {!reviewSpot[0] && <div className="divanlegauch"><i class="fas ti fa-star"></i><p>New</p></div>}
 
                         
-                       { reviewSpot[0] && <div className="divanlegauch">
+                       { reviewSpot[0] && spot.avgStarRating &&<div className="divanlegauch">
                         <i class="fas ti fa-star"></i>
                         <p>{spot.avgStarRating.toFixed(1)}</p>
                         <p>.</p>
