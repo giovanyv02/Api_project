@@ -31,9 +31,10 @@ const SpotComponent = ()=>{
             
                      </div>
                      <div className="uright">
-                        <i class="fa-solid fa-star"></i>
+                     
+                        <i class="fas fa-star"></i>
                         {!ele.avgRating && <div>New</div>}
-                        {ele.avgRating && <div>{ele.avgRating}</div>}
+                        {ele.avgRating && <div>{ele.avgRating.toFixed(1)}</div>}
                         </div>
                  </div>
                  <div>

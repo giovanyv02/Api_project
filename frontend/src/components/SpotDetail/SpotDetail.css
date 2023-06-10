@@ -1,0 +1,75 @@
+.detailDiv{
+    
+    width: 96%;
+    margin: 2%;
+}
+.topimg{
+    margin-top: -3%;
+}
+.imgdetail{
+    /* border: 1px solid red; */
+    display: flex;
+}
+.fimg{
+width: 100%;
+height: 100%;
+}
+.othr{
+        height: 95%;
+    width: 95%;
+  
+}
+.right{
+    /* border: 9px solid yellow; */
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 40%;
+}
+.left{
+        /* border: 6px solid green; */
+    width: 60%;
+  
+    padding-right: 1%;
+}
+.unIm{
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid black;
+}
+.hostedBy{
+    border: 2px solid blue;
+    width: 69%;
+}
+.priceRev{
+    border: 2px solid red;
+    width: 30%;
+    border-radius: 25px;
+    height: 88px;
+}
+.divanle{
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid orange;
+    font-weight: bold;
+}
+.divanledro{
+    border: 1px dotted;
+    width: 45%;
+}
+.divanlegauch{
+    border: 2px dotted blue;
+    display: flex;
+    width: 50%;
+    justify-content: space-evenly;
+}
+.reserveBu{
+    width: 94%;
+    margin-left: 2%;
+    background-color: #FF5A5F;
+    box-shadow: 3px 3px black;
+    color: white;
+}
+.ti{
+    margin-top: 17px;
+}
