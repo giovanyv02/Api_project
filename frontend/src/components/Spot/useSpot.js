@@ -30,7 +30,7 @@ const OneUserSpotComponent = ()=>{
                 <NavLink key={ele.id} to={`/spots/${ele.id}`}>
               
 
-                 <div>
+                 <div className="spotimgDiv">
                      <img className="spotimg" src={ele.previewImage} alt={ele.name}/>
                  </div>
                 </NavLink>
@@ -39,10 +39,14 @@ const OneUserSpotComponent = ()=>{
                      <p className="cityState">{ele.city} {ele.state}</p>
             
                      </div>
-                     <div >{ele.avgRating}</div>
+                     <div className="uright">
+                        <i class="fa-solid fa-star"></i>
+                        {!ele.avgRating && <div>New</div>}
+                        {ele.avgRating && <div>{ele.avgRating}</div>}
+                        </div>
                  </div>
                  <div>
-                     <p className="spotText"> ${ele.price} night</p>
+                     <p className="spotP"> ${ele.price} night</p>
                  </div>
                  <div>
                     

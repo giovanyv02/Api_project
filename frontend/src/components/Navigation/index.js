@@ -14,9 +14,9 @@ function Navigation({ isLoaded }) {
   let sessionLinks;
   if (sessionUser) {
     sessionLinks = (
-      <div>
+      <div className="headerB">
         <NavLink to="/create/spot">Create a Spot</NavLink>
-        <NavLink exact to="/mySpots">Manage spots</NavLink>
+        
         <ProfileButton user={sessionUser} />
       </div>
     );

@@ -72,8 +72,8 @@ export const spotUpdate = (id, spottoUp)=> async dispatch=>{
     if (res.ok){
         const uSpot = await res.json()
         console.log("the spot to update", uSpot.spot)
-         // dispatch(updateSpot(uSpot))
-          dispatch(uppdateSpot(uSpot))
+         dispatch(updateSpot(uSpot))
+        //   dispatch(uppdateSpot(uSpot))
     }
 }
 
@@ -97,7 +97,7 @@ const spotReducer = (state = {}, action) => {
                         return nState
 
                         case UPDATE_SPOT:
-                  return {...state, [action.spott.id]:action.spott }          
+                  return {...state, [action.spott.spot.id]:action.spott.spot }          
         default:
             return state
     }

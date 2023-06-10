@@ -1,20 +1,26 @@
 .allSpotPage{
  
     display: grid;
-     grid-template-columns: 1fr 1fr 1fr;
+     grid-template-columns: 1fr 1fr 1fr 1fr;
+     grid-template-rows: 1fr 1fr 1fr 1fr 1fr ;
+     
      
     }
     body{
         max-width: 1024px;
     }
+    .spotimgDiv{
+        height: 60%;
+    }
     .spotdiv{
-   
+  
     text-decoration: none;
     margin: 0 12px;
+    width: 90%;
 }
 
 .spotimg{
-    height: 300px;
+    height: 100%;
     width: 100%;
     box-sizing: border-box;
    
@@ -24,11 +30,15 @@
 
 .underSpot{
     display: flex;
-   
+  
+   width: 100%;
     text-decoration: none;
     color: black;
     justify-content: space-between;
     height: 30px;
+}
+.uright{
+    display: flex;
 }
 .cityState{
     text-decoration: none;
@@ -38,16 +48,16 @@
 .spotText{
     font-weight: bold;
 }
+.spotP{
+   
+    margin-top: 0;
+    color: black;
+    text-decoration: none;
+}
 .msb{
     margin-right: 5px;
-    background-color: #FF5A5F;
+    
     color: white;
     cursor: pointer;
 }
-    @media screen and (max-width: 950px){
-        .allSpotPage{
-            border: 2px solid  red;
-            display: grid;
-            grid-template-columns: 2fr 2fr;
-        }
-    }
+   
