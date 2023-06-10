@@ -1,0 +1,21 @@
+.delDiv {
+    display: flex;
+    flex-direction: column;
+}
+.delH3{
+    margin-left: 32%
+}
+
+.delP{
+    font-weight: bold;
+}
+.delYes{
+    margin-bottom: 3%;
+    background-color: #FF5A5F;
+    color: white;
+}
+.delNo{
+    margin-bottom: 3%;
+    background-color: gray;
+    color: white;
+}

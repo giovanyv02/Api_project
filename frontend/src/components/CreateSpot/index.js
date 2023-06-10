@@ -5,9 +5,11 @@ import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./createForm.css";
 import { addSpot } from "../../store/spots";
 import { addImageThunk } from "../../store/image";
+import { useModal } from "../../context/Modal";
 
 function CreateForm() {
   const dispatch = useDispatch();
+  const {closeModal} = useModal()
 
   const [country, setcountry] = useState("");
   const [streetAdress, setStreetAdress] = useState("");
@@ -147,6 +149,7 @@ function CreateForm() {
         // if(url4) dispatch(addImageThunk(res.id, url4))
         // if(url5) dispatch(addImageThunk(res.id, url5))
         history.push(`/spots/${res.id}`)
+        closeModal()
 
       }
       refun();

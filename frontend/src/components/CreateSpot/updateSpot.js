@@ -171,29 +171,37 @@ function UpdateForm({id}) {
     <div rot>
 
       <h1>Update your spot</h1>
-      <h2>Where's your place located</h2>
-      <p>Guest will only get your exact address once they booked a reservation.</p>
-      <form onSubmit={onSubmit}>
-        <label>
-          Country
+      <h2 className="h2f">Where's your place located</h2>
+      <p className="pf">Guest will only get your exact address once they booked a reservation.</p>
+      <form onSubmit={onSubmit} className="label">
+        <div className="divlabE"> 
+<h5 className="h5">Country</h5>
+        <label className="lab">
+        
           <input
             type="text"
             value={country}
             onChange={updateCountry}
+            placeholder="Country"
           // 
           />
         </label>
         {validationErrors.country && <p className="errors">{validationErrors.country}</p>}
-        <label>
-          street address
+        </div>
+       <div className="divlabE">
+ <h5 className="h5">Street Adress</h5>
+        <label className="lab">
+          
           <input
             type="text"
             value={streetAdress}
             onChange={updateStreet}
+            placeholder="Street adress"
 
           />
         </label>
         {validationErrors.street && <p className="errors">{validationErrors.street}</p>}
+       </div>
         <label>
           city
           <input
