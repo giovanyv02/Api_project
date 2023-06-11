@@ -23,6 +23,12 @@ export const addRev = (spoId,rev)=> async dispatch=>{
     })
 }
 
+export const delRev = (id)=> async dispatch=>{
+    await csrfFetch(`/api/reviews/${id}`,{
+        method: "Delete"
+    })
+}
+
 const ReviewReducer = (state = {},action)=>{
     switch(action.type){
         case ONE_REVIEW:

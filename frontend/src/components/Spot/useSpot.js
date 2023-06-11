@@ -17,7 +17,7 @@ const OneUserSpotComponent = ()=>{
 
     const spots = useSelector(state=>Object.values(state.userSpots))
    if(!spots[0]){
-    return <NavLink to="/create/spot">Create a new spot</NavLink>
+    return <NavLink exact to="/spots/new">Create a new spot</NavLink>
    }
     // const upD = ()=>{
     //         <UpdateForm id={ele.id}/>
@@ -29,7 +29,7 @@ const OneUserSpotComponent = ()=>{
           
                
             <div className="spotdiv">
-                <NavLink key={ele.id} to={`/spots/${ele.id}`}>
+                <NavLink key={ele.id} exact to={`/spots/${ele.id}`}>
               
 
                  <div className="spotimgDiv">

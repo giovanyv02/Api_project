@@ -5,6 +5,7 @@ import { getOneThunk } from "../../store/detail";
 import { thunkOneReview } from "../../store/reviews"
 import CreateReview from "./createRevForm";
 import OpenModalButton from "../OpenModalButton";
+import DeleteReviewModel from "./deleteRevForm";
 import "./SpotDetail.css";
 const SpotDetailComponent = () => {
 
@@ -134,7 +135,12 @@ let user;
                             <h4>{ele.User.firstName}</h4>
                             <p>{ele.createdAt}</p>
                             <p>{ele.review}</p>
-                            {ele.userId == user && <button>Delete</button>}
+                            {ele.userId == user && <OpenModalButton 
+                            buttonText="Delete"
+                            className="createRevB"
+
+                            modalComponent={<DeleteReviewModel id={ele.id}/>}
+                            />}
 
                         </div>
                         </>

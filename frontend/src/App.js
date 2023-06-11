@@ -19,18 +19,19 @@ function App() {
     <>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
+      
       <Switch>
-        <Route exact path="/spots/:id">
-          <SpotDetailComponent />
+        <Route exact path="/spots/current">
+        <OneUserSpotComponent />
         </Route>
         <Route exact path="/">
         <SpotComponent />
         </Route>
-        <Route path="/create/spot">
+        <Route exact path="/spots/new">
         <CreateForm />
         </Route>
-        <Route exact path="/mySpots">
-        <OneUserSpotComponent />
+        <Route exact path="/spots/:id">
+          <SpotDetailComponent />
         </Route>
         <Route>
           <UpdateForm path="/spot/:id/edit"/>

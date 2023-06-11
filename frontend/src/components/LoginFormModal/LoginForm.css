@@ -3,6 +3,12 @@
     margin-left: 10%;
    
 }
+.demoButton{
+    background-color: #FF5A5F;
+    border: 2px solid black;
+    box-shadow: 2px 2px black;
+    cursor: pointer;
+}
 .log{
     
     height: 250px;

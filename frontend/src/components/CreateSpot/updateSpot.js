@@ -10,7 +10,7 @@ import {addImageThunk} from "../../store/image";
 function UpdateForm({id}) {
     
     const spot = useSelector(state=> state.userSpots[id])
-   
+   console.log("the spot", spot)
   const dispatch = useDispatch();
 
   const [country, setcountry] = useState(spot.country);
