@@ -16,7 +16,9 @@ const OneUserSpotComponent = ()=>{
     },[dispatch])
 
     const spots = useSelector(state=>Object.values(state.userSpots))
-   
+   if(!spots[0]){
+    return <NavLink to="/create/spot">Create a new spot</NavLink>
+   }
     // const upD = ()=>{
     //         <UpdateForm id={ele.id}/>
     // }
