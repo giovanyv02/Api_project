@@ -13,6 +13,14 @@ export const thunkOneReview = (id) => async dispatch=>{
         const reviews = await res.json();
         dispatch(one(reviews))
     }
+};
+
+export const addRev = (spoId,rev)=> async dispatch=>{
+    await csrfFetch(`/api/spots/${spoId}/reviews`,{
+        method: "post",
+        header: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(rev)
+    })
 }
 
 const ReviewReducer = (state = {},action)=>{

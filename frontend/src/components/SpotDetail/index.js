@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { NavLink, useParams } from 'react-router-dom';
 import { getOneThunk } from "../../store/detail";
 import { thunkOneReview } from "../../store/reviews"
+import CreateReview from "./createRevForm";
+import OpenModalButton from "../OpenModalButton";
 import "./SpotDetail.css";
 const SpotDetailComponent = () => {
 
@@ -117,14 +119,27 @@ let user;
                         <p>.</p>
                         <p>{reviewSpot.length} review</p>
                     </div>}
-                    {user && yours !== user && !already[0] && <button>Post your review</button>}
+                    {user && yours !== user && !already[0] &&  <OpenModalButton 
+                    buttonText="Create a Review"
+                    className = "createRevB"
+                   
+                    modalComponent={<CreateReview id={id}/>}
+                    />}
+                    <div className="mes">
+
                     {reviewSpot.map(ele =>
                         <>
+                        <div >
+                            
                             <h4>{ele.User.firstName}</h4>
                             <p>{ele.createdAt}</p>
                             <p>{ele.review}</p>
+                            {ele.userId == user && <button>Delete</button>}
+
+                        </div>
                         </>
                     )}
+                    </div>
                 </div>
             </div>
 

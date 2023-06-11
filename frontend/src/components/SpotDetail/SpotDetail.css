@@ -14,6 +14,10 @@
 width: 100%;
 height: 100%;
 }
+.mes{
+    display: flex;
+    flex-direction: column-reverse;
+}
 .othr{
         height: 95%;
     width: 95%;

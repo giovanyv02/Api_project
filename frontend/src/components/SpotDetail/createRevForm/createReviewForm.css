@@ -1,0 +1,24 @@
+.rating-input{
+   
+    display: flex;
+    align-items: baseline;
+}
+.revStar{
+    font-weight: inherit;
+}
+
+.filled{
+    font-weight: bolder;
+}
+.nope{
+    box-shadow: 3px 3px black;
+    width: 100%;
+    background-color: grey;
+    color: white;
+    margin-bottom: 3%;
+}
+.every{
+    border: 2px solid black;
+    display: grid;
+    justify-items: center;
+}
