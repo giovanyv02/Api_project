@@ -15,7 +15,7 @@ function Navigation({ isLoaded }) {
   if (sessionUser) {
     sessionLinks = (
       <div className="headerB">
-        <NavLink exact to="/spots/new">Create a Spot</NavLink>
+        <NavLink  to="/spots/new">Create a Spot</NavLink>
         
         <ProfileButton user={sessionUser} />
       </div>

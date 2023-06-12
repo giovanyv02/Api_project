@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
+
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import "./createForm.css";
-import { addSpot, spotUpdate } from "../../store/spots";
+import { spotUpdate } from "../../store/spots";
 import {addImageThunk} from "../../store/image";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 
 
 function UpdateForm({id}) {
+  const el = useParams();
+ 
     
     const spot = useSelector(state=> state.userSpots[id])
-   console.log("the spot", spot)
+ 
   const dispatch = useDispatch();
 
   const [country, setcountry] = useState(spot.country);
@@ -20,7 +23,7 @@ function UpdateForm({id}) {
   const [description, setDescription] = useState(spot.description);
   const [title, setTitle] = useState(spot.name);
   const [price, setPrice] = useState(spot.price);
-  const [image, setImage] = useState("");
+  
   const [validationErrors, setValidationErrors] = useState({});
   const [run, setRun] = useState("no")
   const [url1, setUrl1] = useState(spot.previewImage);
@@ -31,7 +34,7 @@ function UpdateForm({id}) {
 
 
   const allSpots = useSelector(state => Object.values(state.spots));
-  const spo = allSpots[allSpots.length - 1];
+
 
   //  useEffect(()=>{
 
@@ -97,6 +100,7 @@ function UpdateForm({id}) {
   const updateUrl5 = (e) => setUrl5(e.target.value);
 
   function onSubmit(e) {
+    
     const errors = {};
     if (!country.length) errors['country'] = "Country can't be empty";
     if (!streetAdress.length) errors['street'] = "street Adress can't be empty";
@@ -130,7 +134,9 @@ function UpdateForm({id}) {
 
   useEffect(() => {
     if (Object.values(newSpot).length && run === "yes") {
+      
       const refun = async () => {
+       
         const res = await dispatch(spotUpdate(spot.id,newSpot))
         if(url1){
             const img1 = {"url":url1, "preview": true}
@@ -157,6 +163,7 @@ function UpdateForm({id}) {
         // if(url3) dispatch(addImageThunk(res.id, url3))
         // if(url4) dispatch(addImageThunk(res.id, url4))
         // if(url5) dispatch(addImageThunk(res.id, url5))
+        
         history.push(`/spots/${spot.id}`)
 
       }

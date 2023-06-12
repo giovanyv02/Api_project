@@ -1,6 +1,6 @@
 import { csrfFetch } from "./csrf";
 import { removesSpot } from "./oneUserSpot";
-import { uppdateSpot } from "./oneUserSpot";
+
 const LOAD_SPOT = "spots/LOAD_SPOT";
  const ADD_SPOT = "spots/ADD_SPOT";
  const UPDATE_SPOT = "spots/UPDATE_SPOT";
@@ -11,20 +11,14 @@ const LOAD_SPOT = "spots/LOAD_SPOT";
     spots
 });
 
- const loadOne = (spot) =>({
-    type: LOAD_ONE,
-    spot
-})
+
 
  const addNewSpot = (spot) => ({
     type: ADD_SPOT,
     spot
 });
 
- const removeSpot = (spotId) => ({
-    type: REMOVE_SPOT,
-    spotId
-});
+
 
  const updateSpot = (spott) => ({
     type: UPDATE_SPOT,
@@ -64,14 +58,17 @@ export const deleSpot = (id)=> async dispatch =>{
 };
 
 export const spotUpdate = (id, spottoUp)=> async dispatch=>{
-    const res = await csrfFetch(`api/spots/${id}`,{
+    
+    const res = await csrfFetch(`/api/spots/${id}`,{
         method: 'PUT',
         header: { 'Content-Type': 'application/json'},
         body: JSON.stringify(spottoUp)
     });
+  
     if (res.ok){
+       
         const uSpot = await res.json()
-        console.log("the spot to update", uSpot.spot)
+       
          dispatch(updateSpot(uSpot))
         //   dispatch(uppdateSpot(uSpot))
     }
