@@ -89,7 +89,7 @@ let user;
 
                             {reviewSpot[0] && spot.avgStarRating && reviewSpot.length !== 1 && <div className="divanlegauch">
                                 <i class="fas ti fa-star"></i>
-                                <p>{spot.avgStarRating.toFixed(1)}</p>
+                                <p>{spot.avgStarRating}</p>
                                 <p>.</p>
                                 <p>{reviewSpot.length} reviews</p>
                             </div>}
@@ -110,16 +110,13 @@ let user;
 
                     {reviewSpot[0] && spot.avgStarRating && reviewSpot.length !== 1 && <div className="revv">
                         <i class="fas ti fa-star"></i>
-                        <div>{spot.avgStarRating.toFixed(1)}</div>
+                        <p>{spot.avgStarRating}</p>
                         <p>.</p>
                         <p>{reviewSpot.length} reviews</p>
                     </div>}
                     {reviewSpot[0] && spot.avgStarRating && reviewSpot.length === 1 && <div className="revv">
                         <i class="fas ti fa-star"></i>
-                      <div>
-                        {spot.avgStarRating.toFixed(1)}
-
-                      </div>
+                        <p>{spot.avgStarRating}</p>
                         <p>.</p>
                         <p>{reviewSpot.length} review</p>
                     </div>}
