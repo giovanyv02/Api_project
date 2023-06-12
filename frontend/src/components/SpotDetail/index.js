@@ -117,7 +117,7 @@ let user;
                     {reviewSpot[0] && spot.avgStarRating && reviewSpot.length === 1 && <div className="revv">
                         <i class="fas ti fa-star"></i>
                         <p>{spot.avgStarRating}</p>
-                        <p>.</p>
+                        
                         <p>{reviewSpot.length} review</p>
                     </div>}
                     {user && yours !== user && !already[0] &&  <OpenModalButton 
