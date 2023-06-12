@@ -116,7 +116,7 @@ let user;
                     </div>}
                     {reviewSpot[0] && spot.avgStarRating && reviewSpot.length === 1 && <div className="revv">
                         <i class="fas ti fa-star"></i>
-                        <p>{spot.avgStarRating.toFixed(1)}</p>
+                        {spot.avgStarRating.toFixed(1)}
                         <p>.</p>
                         <p>{reviewSpot.length} review</p>
                     </div>}
