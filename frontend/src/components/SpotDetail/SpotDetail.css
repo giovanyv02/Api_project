@@ -43,11 +43,14 @@ height: 100%;
 }
 .hostedBy{
    
-    width: 69%;
+    width: 62%;
+}
+.tar{
+    width: 90%;
 }
 .priceRev{
     border: 2px solid black;
-    width: 30%;
+    width: 35%;
     border-radius: 25px;
     height: 88px;
 }

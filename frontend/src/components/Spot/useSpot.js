@@ -15,7 +15,10 @@ const OneUserSpotComponent = ()=>{
         dispatch(loadSpot())
     },[dispatch])
 
-    const spots = useSelector(state=>Object.values(state.userSpots))
+    const user = useSelector(state=> state.session.user.id)
+    const spat = useSelector(state=>Object.values(state.userSpots))
+    const spots = spat.filter(ele=>ele.ownerId == user)
+   
    if(!spots[0]){
     return <NavLink exact to="/spots/new">Create a new spot</NavLink>
    }

@@ -19,7 +19,7 @@ const SpotComponent = ()=>{
           
                
             <div className="spotdiv">
-                <NavLink key={ele.id} exact to={`/spots/${ele.id}`}>
+                <NavLink activeClassName="deco" key={ele.id} exact to={`/spots/${ele.id}`}>
               
 
                  <div className="spotimgDiv">

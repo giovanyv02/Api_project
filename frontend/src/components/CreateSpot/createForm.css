@@ -5,14 +5,21 @@
     width: 53%;
     display: flex;
     flex-direction: column;
+   
   
     margin-left: 28%;
 }
 .h2f, .pf, .h5, .errors, .h3, .p{
     margin: 0;
 }
+.upbu{
+    margin: 2% 0;
+}
 .h4{
     margin-bottom: 0;
+}
+.uptea{
+    width: 80%;
 }
 .pc{
     margin-top: 0;

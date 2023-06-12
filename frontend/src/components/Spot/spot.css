@@ -9,6 +9,12 @@
     body{
         max-width: 1024px;
     }
+    .active{
+        text-decoration: none;
+    }
+    a{
+        text-decoration: none;
+    }
     .spotimgDiv{
         height: 60%;
     }
