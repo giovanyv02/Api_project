@@ -89,7 +89,7 @@ const spotReducer = (state = {}, action) => {
                     return {...state, ...np}
                     case REMOVE_SPOT:
                         const nState = {...state};
-                        console.log(nState)
+                        
                         delete nState[action.spotId];
                         return nState
 

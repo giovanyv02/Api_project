@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {useHistory} from "react-router-dom";
 import "./createReviewForm.css";
-import { useDispatch} from "react-redux";
+import { useDispatch, useSelector} from "react-redux";
 import { addRev } from "../../../store/reviews";
 import { useModal } from "../../../context/Modal";
 
@@ -13,6 +13,8 @@ export default function CreateReview({id}){
     const [sub, setSub] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
+    const user = useSelector(state=>state.session.user)
+    
     
     
     let klik = false
@@ -20,7 +22,7 @@ export default function CreateReview({id}){
         if(sub){
             const nR = {"review": text, "stars":activeRating}
             
-            dispatch(addRev(id, nR));
+            dispatch(addRev(id, nR, user));
             history.replace(`/spots/${id}`);
             closeModal()
             

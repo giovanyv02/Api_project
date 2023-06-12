@@ -42,7 +42,7 @@ let user;
     const reviewSpot = reviews.filter(rev => rev.spotId == id);
     const already = reviewSpot.filter(rev=> rev.userId == user)
    
-   
+   console.log("reviewspot",reviewSpot)
 
 
     if (!spot.id) return null
