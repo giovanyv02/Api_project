@@ -12,6 +12,10 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
+  const err = {}
+  if(credential.length < 4) err['credential'] = "name needs to be at least 4 characters";
+  if(password.length < 6) err['password'] = "password needs to be at least 6 characters";
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
@@ -60,7 +64,7 @@ function LoginFormModal() {
         {errors.credential && (
           <p className="errors">{errors.credential}</p>
         )}
-        <button className="subButton" type="submit">Log In</button>
+        <button className="subButton" type="submit" disabled={credential.length < 4 || password.length < 6}>Log In</button>
       </form>
 
       <button className="demoButton" onClick={demo}>Demo user</button>
