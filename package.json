@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bcryptjs": "^2.4.3"
+    "bcryptjs": "^2.4.3",
+    "react-date-picker": "^10.3.0",
+    "react-date-range": "^1.4.0"
   },
-  "devDependencies": {},
   "scripts": {
     "render-postbuild": "npm run build --prefix frontend",
     "install": "npm --prefix backend install backend && npm --prefix frontend install frontend",

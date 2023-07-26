@@ -38,9 +38,7 @@ function UpdateForm({ id }) {
   const allSpots = useSelector(state => Object.values(state.spots));
 
 
-  //  useEffect(()=>{
-
-  //      const errors = {};
+ 
   const err = {}
   if (!country.length) err['country'] = "Country can't be empty";
   if (!streetAdress.length) err['street'] = "street Adress can't be empty";
@@ -54,10 +52,7 @@ function UpdateForm({ id }) {
   if (url3.length && !url3.endsWith('.png') && !url3.endsWith('.jpg') && !url3.endsWith('jpeg')) err['url3'] = "Image Url must end in .png .jpg or .jpeg"
   if (url4.length && !url4.endsWith('.png') && !url4.endsWith('.jpg') && !url4.endsWith('jpeg')) err['url4'] = "Image Url must end in .png .jpg or .jpeg"
   if (url5.length && !url5.endsWith('.png') && !url5.endsWith('.jpg') && !url5.endsWith('jpeg')) err['url5'] = "Image Url must end in .png .jpg or .jpeg"
-  //   if (!url1.length) err['url1'] = "Preview image is required";
-  //   if (!url1.endsWith('.png') && !url1.endsWith('.jpg') && !url1.endsWith('jpeg')) err['url1'] = "Image Url must end in .png .jpg or .jpeg";
-
-  //   if(typeof price != "number") err['price'] = "price must be a number";
+ 
   let newSpot = {}
 
 
@@ -77,15 +72,7 @@ function UpdateForm({ id }) {
   };
 
 
-  //      if(!streetAdress.length) errors['country'] = "Country can't be empty";
-  //      if(!city.length) errors['country'] = "Country can't be empty";
-  //      if(!state.length) errors['country'] = "Country can't be empty";
-  //      if(!description.length) errors['description'] = "description can't be empty";
-  //      if(!title.length) errors['title'] = "title can't be empty";
-  //      if(!price.length) errors['price'] = "price can't be empty";
-  //      if(typeof price != "number") errors['price'] = "price must be a number";
-  //  setValidationErrors(errors);
-  //  },[country,streetAdress,state,city,description,title,price])
+
 
   const history = useHistory();
   const updateCountry = (e) => setcountry(e.target.value);
@@ -95,11 +82,7 @@ function UpdateForm({ id }) {
   const updateTitle = (e) => setTitle(e.target.value);
   const updatePrice = (e) => setPrice(e.target.value);
   const updateState = (e) => setState(e.target.value);
-  const updateUrl1 = (e) => setUrl1(e.target.value);
-  const updateUrl2 = (e) => setUrl2(e.target.value);
-  const updateUrl3 = (e) => setUrl3(e.target.value);
-  const updateUrl4 = (e) => setUrl4(e.target.value);
-  const updateUrl5 = (e) => setUrl5(e.target.value);
+
 
   function onSubmit(e) {
 
@@ -116,9 +99,7 @@ function UpdateForm({ id }) {
     if (url3.length && !url3.endsWith('.png') && !url3.endsWith('.jpg') && !url3.endsWith('jpeg')) errors['url3'] = "Image Url must end in .png .jpg or .jpeg"
     if (url4.length && !url4.endsWith('.png') && !url4.endsWith('.jpg') && !url4.endsWith('jpeg')) errors['url4'] = "Image Url must end in .png .jpg or .jpeg"
     if (url5.length && !url5.endsWith('.png') && !url5.endsWith('.jpg') && !url5.endsWith('jpeg')) errors['url5'] = "Image Url must end in .png .jpg or .jpeg"
-    // if (!url1.endsWith('.png') && !url1.endsWith('.jpg') && !url1.endsWith('jpeg')) errors['url1'] = "Image Url must end in .png .jpg or .jpeg";
-    //  if (!url1.length) errors['url1'] = "Preview image is required";
-    //  if(typeof price != "number") errors['price'] = "price must be a number";
+   
     setValidationErrors(errors);
     e.preventDefault();
 
@@ -140,31 +121,8 @@ function UpdateForm({ id }) {
       const refun = async () => {
 
         const res = await dispatch(spotUpdate(spot.id, newSpot))
-        if (url1) {
-          const img1 = { "url": url1, "preview": true }
-          dispatch(addImageThunk(spot.id, img1));
-
-        };
-        if (url2) {
-          const img1 = { "url": url2, "preview": true };
-          dispatch(addImageThunk(res.id, img1))
-        };
-        if (url3) {
-          const img1 = { "url": url3, "preview": true };
-          dispatch(addImageThunk(res.id, img1))
-        };
-        if (url4) {
-          const img1 = { "url": url4, "preview": true };
-          dispatch(addImageThunk(res.id, img1))
-        };
-        if (url5) {
-          const img1 = { "url": url5, "preview": true };
-          dispatch(addImageThunk(res.id, img1))
-        }
-        // if(url2) dispatch(addImageThunk(res.id, url2))
-        // if(url3) dispatch(addImageThunk(res.id, url3))
-        // if(url4) dispatch(addImageThunk(res.id, url4))
-        // if(url5) dispatch(addImageThunk(res.id, url5))
+       
+       
         closeModal()
         history.push(`/spots/${spot.id}`)
 

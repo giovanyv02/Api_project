@@ -6,7 +6,11 @@ import { thunkOneReview } from "../../store/reviews"
 import CreateReview from "./createRevForm";
 import OpenModalButton from "../OpenModalButton";
 import DeleteReviewModel from "./deleteRevForm";
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
+import { DateRange } from "react-date-range";
 import "./SpotDetail.css";
+
 const SpotDetailComponent = () => {
 
     const dispatch = useDispatch();
@@ -31,24 +35,42 @@ const SpotDetailComponent = () => {
     }
 
     const reviews = useSelector(state => Object.values(state.reviews))
-    const us = useSelector(state=>state.session.user)
-let user;
-    if(us){
+    const us = useSelector(state => state.session.user)
+    let user;
+    if (us) {
         user = us.id
 
     }
-    const yours = useSelector(state=> state.detail.ownerId)
+    const yours = useSelector(state => state.detail.ownerId)
 
     const reviewSpot = reviews.filter(rev => rev.spotId == id);
-    const already = reviewSpot.filter(rev=> rev.userId == user)
-   
-   console.log("reviewspot",reviewSpot)
+    const already = reviewSpot.filter(rev => rev.userId == user)
+
+    console.log("reviewspot", reviewSpot)
 
 
     if (!spot.id) return null
     const alertf = () => {
         alert("Feature coming soon")
     }
+
+   const handleSelect=(ranges)=>{
+    console.log(ranges);
+    // {
+    //   selection: {
+    //     startDate: [native Date Object],
+    //     endDate: [native Date Object],
+    //   }
+    // }
+    selectionRange.startDate = ranges.selection.startDate
+    selectionRange.endDate = ranges.selection.endDate
+  }
+
+    const selectionRange = {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+      }
 
 
 
@@ -80,6 +102,11 @@ let user;
                         <p>{spot.description}</p>
                     </div>
                     <div className="priceRev">
+                    <DateRange
+        ranges={[selectionRange]}
+        onChange={handleSelect}
+        disabledDays={{before: new Date()}}
+      >lalallalal</DateRange>
                         <div className="divanle">
                             <div className="divanledro">
                                 <p>${spot.price} night</p>
@@ -120,31 +147,31 @@ let user;
                         <p>.</p>
                         <p>{reviewSpot.length} review</p>
                     </div>}
-                    {user && yours !== user && !already[0] &&  <OpenModalButton 
-                    buttonText="Create a Review"
-                    className = "createRevB"
-                   
-                    modalComponent={<CreateReview id={id}/>}
+                    {user && yours !== user && !already[0] && <OpenModalButton
+                        buttonText="Create a Review"
+                        className="createRevB"
+
+                        modalComponent={<CreateReview id={id} />}
                     />}
                     <div className="mes">
 
-                    {reviewSpot.map(ele =>
-                        <>
-                        <div >
-                            
-                            <h4>{ele.User.firstName}</h4>
-                            <p>{ele.createdAt}</p>
-                            <p>{ele.review}</p>
-                            {ele.userId == user && <OpenModalButton 
-                            buttonText="Delete"
-                            className="createRevB"
+                        {reviewSpot.map(ele =>
+                            <>
+                                <div >
 
-                            modalComponent={<DeleteReviewModel id={ele.id}/>}
-                            />}
+                                    <h4>{ele.User.firstName}</h4>
+                                    <p>{ele.createdAt}</p>
+                                    <p>{ele.review}</p>
+                                    {ele.userId == user && <OpenModalButton
+                                        buttonText="Delete"
+                                        className="createRevB"
 
-                        </div>
-                        </>
-                    )}
+                                        modalComponent={<DeleteReviewModel id={ele.id} />}
+                                    />}
+
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
